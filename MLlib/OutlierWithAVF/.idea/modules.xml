@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/OutlierWithAVF.iml" filepath="$PROJECT_DIR$/OutlierWithAVF.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/outlierwithavf.iml" filepath="$PROJECT_DIR$/.idea/modules/outlierwithavf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/outlierwithavf-build.iml" filepath="$PROJECT_DIR$/.idea/modules/outlierwithavf-build.iml" />
+    </modules>
+  </component>
+</project>

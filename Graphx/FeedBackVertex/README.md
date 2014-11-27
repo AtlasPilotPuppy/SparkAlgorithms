@@ -1,3 +1,7 @@
+#Finding Feedback Vertex Set 
+
+## A greedy solution
+
 A greedy recursive solution to find feedback vertex set of a directed graph.
 
 

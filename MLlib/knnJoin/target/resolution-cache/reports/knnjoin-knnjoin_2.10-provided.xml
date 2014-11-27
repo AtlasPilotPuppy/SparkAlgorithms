@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ivy-report.xsl"?>
+<ivy-report version="1.0">
+	<info
+		organisation="knnjoin"
+		module="knnjoin_2.10"
+		revision="1.0"
+		conf="provided"
+		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
+		date="20141120161702"/>
+	<dependencies>
+		<module organisation="org.apache.spark" name="spark-mllib_2.10">
+			<revision name="1.0.0-SNAPSHOT" error="not found" downloaded="false" searched="false" conf="default(compile)" position="-1">
+				<caller organisation="knnjoin" name="knnjoin_2.10" conf="provided" rev="1.0.0-SNAPSHOT" rev-constraint-default="1.0.0-SNAPSHOT" rev-constraint-dynamic="1.0.0-SNAPSHOT" callerrev="1.0"/>
+				<artifacts>
+				</artifacts>
+			</revision>
+		</module>
+	</dependencies>
+</ivy-report>

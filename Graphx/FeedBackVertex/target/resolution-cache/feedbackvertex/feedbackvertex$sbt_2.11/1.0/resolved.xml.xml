@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" xmlns:e="http://ant.apache.org/ivy/extra">
+	<info organisation="feedbackvertex"
+		module="feedbackvertex$sbt_2.11"
+		revision="1.0"
+		status="integration"
+		publication="20141126200454"
+	/>
+	<configurations>
+		<conf name="default" visibility="public"/>
+	</configurations>
+	<publications>
+	</publications>
+	<dependencies>
+		<dependency org="org.scala-sbt" name="sbt" rev="0.13.5" conf="default->default(compile)"/>
+		<dependency org="com.typesafe.sbteclipse" name="sbteclipse-plugin" rev="2.5.0" conf="default->default(compile)" sbtVersion="0.13" scalaVersion="2.10"/>
+		<dependency org="com.typesafe.sbteclipse" name="sbteclipse-core" rev="2.5.0" conf="default->default(compile)" sbtVersion="0.13" scalaVersion="2.10"/>
+		<dependency org="org.scalaz" name="scalaz-core_2.10" rev="7.0.2" conf="default->default(compile)"/>
+		<dependency org="org.scala-lang" name="scala-library" rev="2.10.1" conf="default->default(compile)"/>
+		<dependency org="org.scalaz" name="scalaz-effect_2.10" rev="7.0.2" conf="default->default(compile)"/>
+	</dependencies>
+</ivy-module>

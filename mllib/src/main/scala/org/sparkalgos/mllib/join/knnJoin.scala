@@ -40,15 +40,9 @@ object knnJoin {
                 .sortByKey(false)
                 .map(word => word._2)
                 .zipWithIndex()
-
-
-   /**
-    * Need 2*len entries, hence the IF-ELSE construct to guarantee these many no.of entries in
-    * the returned RDD
-    * if the no.of entries in the greaterRDD and lesserRDD is greater than <len>
-    * extract <len> no.of entries from each RDD
-    */
-
+   //Need 2*len entries, hence the IF-ELSE construct to guarantee these many no.of entries
+   //if the no.of entries in the greaterRDD and lesserRDD is greater than <len>
+   //extract <len> no.of entries from each RDD
    if((greaterRDD.count >= len)&&(lesserRDD.count >= len)) {
      val trim = greaterRDD.filter(word => word._2 < len).map(word => word._1).
             union(lesserRDD.filter(word => word._2 < len).map(word => word._1))
@@ -58,12 +52,9 @@ object knnJoin {
             .map(word => word._2._1 -> word._1)
      join
    }
-   /*
-   if the no.of entries in the greaterRDD less than <len>  extract all entries from greaterRDD and
-   <len> + (<len> - greaterRDD.count) no.of entries from lesserRDD
-   */
+   //if the no.of entries in the greaterRDD less than <len>  extract all entries from greaterRDD and
+   //<len> + (<len> - greaterRDD.count) no.of entries from lesserRDD
    else if(greaterRDD.count < len) {
-
      val lenMod = len + (len - greaterRDD.count)
      val trim = greaterRDD.map(word => word._1)
             .union(lesserRDD.filter(word => word._2 < lenMod)

@@ -14,30 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sparkAlgos.mllib.clustering
-
 import org.apache.spark.SparkContext
+import org.apache.spark.graphx._
 
 
-/**
- * Driver for the OutlierWithAVFModel 
- *
- **/
-object Test{
+object FVS {
 
-  def main(args:Array[String])
-  {
-    val sc = new SparkContext("local", "OutlierDetection")
-    val dir = "/home/ashu/Desktop/abc.txt"//"hdfs://localhost:54310/train3"//
+  def main(args: Array[String]) {
 
+    val sc = new SparkContext("local","FVS")
+    var res = sc.parallelize(Array[Long]())
 
-    val data = sc.textFile(dir).map(word => word.split(",").toVector)
-    val model = OutlierWithAVFModel.outliers(data,30,sc) //"hdfs://localhost:54310/train3"
+    //build graph
+    val edges =
+      Array(1L -> 4L,  1L -> 2L,   2L -> 5L,   2L -> 3L,  3L ->5L,    3L->9L) ++
+        Array(4L -> 5L,  4L -> 6L,   6L -> 5L,   6L -> 7L,  7L -> 6L,   7L -> 3L,  7L -> 9L) ++
+        Array(8L -> 10L, 8L -> 6L,   9L -> 10L,  9L -> 1L,  10L -> 7L,  10L -> 8L)
 
-    model.score.saveAsTextFile("/home/ashu/Desktop/sc")
-    model.trimedData.saveAsTextFile("/home/ashu/Desktop/tri")
-    model.outliers.saveAsTextFile("/home/ashu/Desktop/outs")
+    val rawEdges = sc.parallelize(edges)
+    val graph = Graph.fromEdgeTuples(rawEdges, -1).mapVertices((id,attr) => id.toLong)
 
+    res = res.union(FVSModel.feedbackVertexSet(graph,sc)).coalesce(1)
+    res.persist()
+    res.saveAsTextFile("/home/ashu/Desktop/k")
   }
-
 }

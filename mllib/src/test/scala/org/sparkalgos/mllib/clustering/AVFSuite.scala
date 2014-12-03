@@ -1,3 +1,4 @@
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -14,10 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-  import org.apache.spark.rdd.RDD
-  import org.scalatest.{BeforeAndAfterEach, FunSuite}
   import org.sparkalgos.mllib.utils.LocalSparkContext
   import org.sparkAlgos.mllib.clustering.OutlierWithAVFModel
+  import org.apache.spark.rdd.RDD
+  import org.scalatest.{BeforeAndAfterEach, FunSuite}
+
 
   class outSuit extends FunSuite with BeforeAndAfterEach with LocalSparkContext {
 

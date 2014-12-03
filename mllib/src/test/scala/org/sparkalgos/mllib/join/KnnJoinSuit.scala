@@ -17,6 +17,8 @@
 import org.apache.spark.rdd.RDD
 import org.scalatest.{BeforeAndAfterEach, FunSuite}
 import org.sparkalgos.mllib.utils.LocalSparkContext
+import org.scalatest.{BeforeAndAfterEach, FunSuite}
+import org.sparkalgos.mllib.join.KnnJoin
 
 class KnnJoinSuit extends FunSuite with BeforeAndAfterEach with LocalSparkContext {
 
@@ -53,12 +55,14 @@ class KnnJoinSuit extends FunSuite with BeforeAndAfterEach with LocalSparkContex
     iter = 4
   }
     test("four neighbors should be there when length is four"){
+
       val model = KnnJoin.knnJoin(data,point,len,iter,sc)
       assert(model.count() == 4)
 
     }
     test("No neighbors should be computed when length is zero"){
       len = 0
+
       val model = KnnJoin.knnJoin(data,point,len,iter,sc)
       assert(model.count() == len)
     }

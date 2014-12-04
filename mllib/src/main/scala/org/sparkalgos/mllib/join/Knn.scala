@@ -1,9 +1,6 @@
-/**
- * Created by ashu on 11/20/14.
- */
-
 import org.apache.spark.SparkContext
-import org.apache.spark.rdd.RDD
+import org.sparkalgos.mllib.join.KnnJoin
+
 object Knn {
 
    def main (args: Array[String]) {
@@ -27,7 +24,7 @@ object Knn {
      val len = 3
      val iter = 4
 
-     val model = knnJoin.knnJoin( data, point, len, iter, sc)
+     val model = KnnJoin.knnJoin( data, point, len, iter, sc)
 
      model.saveAsTextFile("/home/ashu/Desktop/knn")
 

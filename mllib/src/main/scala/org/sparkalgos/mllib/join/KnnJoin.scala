@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sparkalgos.mllib.join
-
-import org.sparkAlgos.mllib.join.zScore
+package org.sparkAlgos.mllib.join
 
 import scala.math._
 import org.apache.spark.SparkContext

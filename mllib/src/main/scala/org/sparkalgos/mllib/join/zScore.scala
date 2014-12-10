@@ -20,70 +20,61 @@ package org.sparkAlgos.mllib.join
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 import scala.collection.immutable.Vector
+import scala.math.BigInt
+import java.util.logging.Logger
 
 object zScore {
-  
-  /**
-   * Formats the integer to it's binary value with 0's spaced to the left of the binary string
-   * i.e. * asNdigitBinary(3,4) = 0011
-   * 
-   * @param source : Integer to be formatted to it's binary value
-   * @param digits : the length of the binary string
-   * @return binary value of <source> with length of the string equal to <digits>
-   */
 
-  def asNdigitBinary (source: Int, digits: Int): String = {
-		val l: java.lang.Long = source.toBinaryString.toLong
-		String.format ("%0" + digits + "d", l) 
-  }
-  
+	/**
+	 * Computes the z-score of a Vector
+	 *  
+	 * @param Vector of Long/Int
+	 * @return z-score of the vector      
+	 */
+	val logger = Logger.getLogger("zScore")
+	def scoreOfDataPoint[A](vector : Vector[A]) : BigInt = {
+			val arg = vector(0)
+					arg match{
 
-  /**
-   * Computes the z-value of each Vector[Int]
-   * i.e. Vector(2,6) z-value will be 28
-   * @param vector : a Vector of Integers which refers to a data-point
-   * @return z-value of the vector 
-   */
-  def scoreOfDataPoint(vector : Vector[Int]) : Long = {
- 
-    var max = 0
+					// if input is Vector[Int]
+					case _: Int => 
+					val vec = vector.map(word => word.toString.toInt)
+					zScore_Int.scoreOfDataPoint(vec)
 
-    //compute the length of the largest binary string in the vector of integers
-    for(i <- 0 to vector.length-1){
-      if (vector(i).toBinaryString.length() > max ) max = vector(i).toBinaryString.length()
-    }
+					// if input is Vector[Long]					
+					case _: Long => 
+					val vec = vector.map(word => word.toString.toLong)
+					zScore_Long.scoreOfDataPoint(vec)
 
-    var str = new StringBuilder(max * vector.length )
 
-    //map each integer within the vector to a formatted binary string of length <max>
-    val bin2 = vector.map(word => asNdigitBinary(word, max))
+					case _ => logger.severe("Argument_0 to scoreOfDataPoint isn't of type Int/Long")
+					exit(0)
+			}
+	}
 
-    //create the string which is the binary string(z-value) for the input vector
-    for(i <- 0 to max-1) {
-      for(j <- 0 to vector.length-1) {
-        
-        str += bin2(j)(i)
-      }
-    }
-  
-    //convert the binary string(z-value) to it's corresponding Integer value
-    Integer.parseInt(str.toString(), 2).toLong
-  }
-  
-  /**
-   * Computers the z-scores for each entry of the input RDD of Vector of Int, sorted in ascending order
-   * 
-   * @param  rdd[(Vector[Int],Long)]) of Vector of Int
-   * @return z-scores of the RDD[( <line_no> , <z-value> )]
-   */
-  def computeScore(rdd : RDD[(Vector[Int],Long)])	: RDD[(Long,Long)] = {
+	/**
+	 * Computers the z-scores for each entry of the input RDD of Vector of Int/Long, sorted in ascending order
+	 * 
+	 * @param  rdd of Vector of Int/Long & Long
+	 * @return z-scores of the RDD[( <line_no> , <z-value> )]
+	 */
+	def computeScore[A](rdd : RDD[(Vector[A],Long)])	: RDD[(Long,BigInt)] = {
 
-    val score = rdd.map(word => scoreOfDataPoint(word._1) -> word._2).
-    			sortByKey(true).
-    			map(word => word._2 -> word._1)
-    
-    score
-        
-  }
-  
+			val arg = rdd.first._1
+				arg(0) match{
+			  
+					// 	if input is Vector[Int]
+					case _: Int => 
+					val vec = rdd.map(line => line._1.map(f => f.toString.toInt) -> line._2)
+					zScore_Int.computeScore(vec)
+					
+					// if input is Vector[Long]					
+					case _: Long => 
+					val vec = rdd.map(line => line._1.map(f => f.toString.toLong) -> line._2)
+					zScore_Long.computeScore(vec)
+					
+					case _ => logger.severe("Argument_0 to scoreOfDataPoint isn't of type Int/Long")
+					exit(0)
+			}
+	}
 }

@@ -14,9 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.sparkAlgos.mllib.join
-
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 import scala.collection.immutable.Vector
@@ -24,22 +21,24 @@ import scala.math.BigInt
 
 object zScore_Long {
   
-  /**
-   * Formats the integer to it's binary value with 0's spaced to the left of the binary string
-   * i.e. * asNdigitBinary(3,4) = 0011
-   * 
-   * @param source : Long to be formatted to it's binary value
-   * @param digits : the length of the binary string
-   * @return binary value of <source> with length of the string equal to <digits>
-   */
-
-  def asNdigitBinary (source: Long, digits: Int): String = {
-		val l: java.lang.Long = source.toBinaryString.toLong
-		String.format ("%0" + digits + "d", l) 
-  }
   
+	/**
+	 * Checks if all entries within the array are 0 or not
+	 * 
+	 * @param Array of Int
+	 * @return 1, if all elements are zero; else 0
+	 */
+	def checkVectors(vector : Array[Long]) : Int = {
+			var flag = 1
 
- 
+					for(i <- 0 to vector.length - 1){
+						if(vector(i)!=0){
+							flag = 0
+						}
+					}
+
+			return flag
+	}
   
   /**
    * Computers the z-scores for each entry of the input RDD of Vector of Long,
@@ -64,35 +63,23 @@ object zScore_Long {
    * @return z-score of the vector      
    */
   def scoreOfDataPoint(vector : Vector[Long]) : BigInt = {
- 
-    var max = 0
-
-    //compute the length of the largest binary string in the vector of integers
-    for(i <- 0 to vector.length-1){
-      if (vector(i).toBinaryString.length() > max ) max = vector(i).toBinaryString.length()
-    }
-
-    var str = new StringBuilder(max * vector.length )
-
-    //map each integer within the vector to a formatted binary string of length <max>
-    val bin2 = vector.map(word => asNdigitBinary(word, max))
-
-    //create the string which is the binary string(z-value) for the input vector
-    for(i <- 0 to max-1) {
-      for(j <- 0 to vector.length-1) {
-        
-        str += bin2(j)(i)
+  
+    var x = vector.toArray
+    
+    var temp = 0L
+    var score : BigInt = 0
+    var counter = 0
+    
+    while(checkVectors(x) == 0) {
+      for(i <- x.length-1 to 0 by -1){
+        temp = x(i) & ((1 << 1) - 1)
+        temp = temp << counter
+        score = score+temp
+        x(i) = x(i)>>1
+        counter = counter + 1
       }
     }
-    str = str.reverse
-    
-    //convert the binary string(z-value) to it's corresponding Integer value
-    var b : BigInt = 0
-    for(i <- 0 to str.length-1){
-      if(str(i).equals('1')) b = b.setBit(i)
-    }
-    
-    b
+    score
   }
   
 }
